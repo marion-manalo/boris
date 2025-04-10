@@ -51,7 +51,7 @@ const Navbar = () => {
               onClick={handleLogin}
               className='bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600'
             >
-              {isLoggedIn ? 'Logout' : 'Login'}
+              {isLoggedIn ? 'Logout' : 'Login/Sign up'}
             </button>
           </div>
         </div>
