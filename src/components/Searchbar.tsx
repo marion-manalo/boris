@@ -13,7 +13,7 @@ const Searchbar = () => {
   };
 
   return (
-    <div className="mt-6 flex justify-center">
+    <div className="mt-0 flex justify-start px-6">
       <input
         type="text"
         placeholder="Enter stock ticker..."

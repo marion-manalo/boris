@@ -3,7 +3,7 @@ import Searchbar from "./Searchbar";
 
 const Splash = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+    <div className="flex flex-col items-start justify-center h-screen bg-gray-100">
       <Welcome />
       <Searchbar />
     </div>
