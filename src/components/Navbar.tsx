@@ -3,13 +3,22 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import logo from '@/assets/boris.png';
+import { useRouter } from 'next/navigation';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const {data: session} = useSession();
+  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const handleLogin = () => {
-    setIsLoggedIn((prev) => !prev);
+  const handleAuthClick = () => {
+    if (session) {
+      signOut({ callbackUrl: '/'});
+    } else {
+      router.push('/login');
+    }
+    // setIsLoggedIn((prev) => !prev);
   };
 
   const toggleMobileMenu = () => {
@@ -48,10 +57,10 @@ const Navbar = () => {
           {/* Login/Logout Button */}
           <div className='hidden md:block'>
             <button
-              onClick={handleLogin}
+              onClick={handleAuthClick}
               className='bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600'
             >
-              {isLoggedIn ? 'Logout' : 'Login/Sign up'}
+              {session ? 'Logout' : 'Login/Sign up'}
             </button>
           </div>
         </div>
@@ -64,10 +73,10 @@ const Navbar = () => {
           <a href='/about' className='block text-gray-700 py-2'>About</a>
           <a href='/contact' className='block text-gray-700 py-2'>Contact</a>
           <button
-            onClick={handleLogin}
+            onClick={handleAuthClick}
             className='w-full bg-gray-500 text-white mt-2 py-2 rounded-md hover:bg-gray-600'
           >
-            {isLoggedIn ? 'Logout' : 'Login'}
+            {session ? 'Logout' : 'Login'}
           </button>
         </div>
       )}
