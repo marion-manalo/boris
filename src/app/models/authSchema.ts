@@ -1,13 +1,19 @@
-import mongoose, { Document, Schema } from 'mongoose';
-import bcrypt from 'bcrypt';
+import mongoose, { Document, Schema, Model } from 'mongoose';
 
+// interface to establish what a user is made up of
 export interface IUser extends Document {
+    username: string;
     email: string;
     password: string;
-    comparePassword: (candidatePassword: string) => Promise<boolean>;
 }
 
+// establishes what the schema inside the mongoDB will look like
 const userSchema = new mongoose.Schema<IUser>({
+    username: {
+        type: String,
+        required: true,
+        unique: false,
+    },
     email: {
         type: String,
         required: true,
@@ -19,25 +25,10 @@ const userSchema = new mongoose.Schema<IUser>({
         unique: false,
     },
 },
+    // very important: establishes which collection within the DB the user info will go
     { collection: 'loginInfo'}
 );
 
-userSchema.pre<IUser>('save', async function (next) {
-    if (!this.isModified('password')) return next();
-
-    try {
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
-        next();
-    } catch (error: any) {
-        next(error);
-    }
-})
-
-userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
-    return bcrypt.compare(candidatePassword, this.password);
-};
-
-const User = mongoose.models.User || mongoose.model<IUser>('User', userSchema);
+const User: Model<IUser> = mongoose.models.User || mongoose.model<IUser>("User", userSchema);
 
 export default User;
