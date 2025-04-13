@@ -67,6 +67,14 @@ export default function LoginForm() {
                 Log In
             </button>
 
+            <button
+                type="submit"
+                className="button"
+                onClick={() => router.push('/signup')}
+            >
+                Signup
+            </button>
+
             {error && <p className="error">{error}</p>}
         </form>
     );
