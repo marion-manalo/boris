@@ -1,32 +1,40 @@
-.card {
+.item-card {
     /* styles for the Card container */
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: white;
   }
   
-  .imageContainer {
+  .item-image-container {
     position: relative;
     width: 100%;
     height: 150px;
   }
   
-  .image {
+  .item-image {
     object-fit: contain;
     border-radius: 0.5rem;
   }
   
-  .companyName {
+  .item-company-name {
     font-size: 1.25rem;
     font-weight: 600;
     margin-top: 0.5rem;
   }
   
-  .ticker {
+  .item-ticker {
     font-size: 1rem;
-    color: #4b5563; /* Tailwind's gray-700 */
+    color: #4b5563;
   }
   
-  .stockValue {
+  .item-stock-value {
     font-size: 1rem;
     font-weight: 500;
     color: green;
   }
   
+  .item-description {
+    margin-top: 0.5rem;
+    color: #4b5563;
+  }
