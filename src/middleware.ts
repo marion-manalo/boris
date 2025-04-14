@@ -12,7 +12,7 @@ const middleware = async (request: NextRequest) => {
     console.log(isAuthenticated, pathname);
 
     // add routes here if they are meant to be public (would probably include contact later once implemented)
-    const publicPaths = ["/", "/login", "/signup", "/about"];
+    const publicPaths = ["/", "/login", "/signup", "/about", "/public"];
 
     if (!isAuthenticated && !publicPaths.includes(pathname)) {
         return NextResponse.redirect(new URL("/", request.url));
