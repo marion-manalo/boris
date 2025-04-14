@@ -33,7 +33,7 @@ const Searchbar = ({ handleSearch }: SearchbarProps) => {
       companyName: `Company for ${ticker.toUpperCase()}`,
       stockValue: Math.floor(Math.random() * 1000),
       logoURL: 'https://placehold.co/100x100',
-      description: `This is a mock description for ${ticker.toUpperCase()}.`,
+      description: `This is a sample description for ${ticker.toUpperCase()}.`,
     };
 
     handleSearch(newItem);
@@ -50,7 +50,7 @@ const Searchbar = ({ handleSearch }: SearchbarProps) => {
         className="searchbar-input"
       />
       <button onClick={onSearchClick} className="searchbar-button">
-        View Report
+        Add
       </button>
     </div>
   );

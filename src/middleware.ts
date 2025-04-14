@@ -25,7 +25,7 @@ const middleware = async (request: NextRequest) => {
 // the reports route would probably go here too
 export const config = {
     matcher: [
-        "/reports"
+        "/reports", "/dashboard"
     ]
 };
 
