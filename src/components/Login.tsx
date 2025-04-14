@@ -31,7 +31,7 @@ export default function LoginForm() {
                 console.error(result.error);
                 setError(result.error || 'Invalid credentials');
             } else {
-                router.push('/');
+                router.push('/dashboard');
             }
         } catch (e: any) {
             console.error('Login error:', e);

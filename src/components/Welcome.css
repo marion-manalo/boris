@@ -1,0 +1,42 @@
+.welcome-container {
+    text-align: left;
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: 1.5rem;
+  }
+  
+  .welcome-title {
+    font-size: 1.875rem;
+    font-weight: bold;
+    color: #1f2937;
+  }
+  
+  .welcome-description {
+    font-size: 1.125rem;
+    color: #4b5563;
+    margin-top: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  .welcome-subtitle {
+    text-align: left;
+    font-size: 1rem;
+    color: #4b5563;
+    margin: 0;
+  }
+  
+  .welcome-button {
+    margin-top: .75rem;
+    background-color: #030303;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0 0.375rem 0.375rem 0;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .welcome-button:hover {
+    background-color: #1a1a1a; /* Optional: darker on hover */
+  }
+  
