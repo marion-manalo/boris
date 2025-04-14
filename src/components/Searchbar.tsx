@@ -1,30 +1,28 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
+import './Searchbar.css';
 
 const Searchbar = () => {
-  const [ticker, setTicker] = useState("");
+  const [ticker, setTicker] = useState('');
 
   const handleSearch = () => {
-    if (ticker.trim() !== "") {
+    if (ticker.trim() !== '') {
       console.log(`Searching for stock: ${ticker}`);
       // Handle navigation or API call here
     }
   };
 
   return (
-    <div className="mt-0 flex justify-start px-6">
+    <div className="searchbar-container">
       <input
         type="text"
         placeholder="Enter stock ticker..."
         value={ticker}
         onChange={(e) => setTicker(e.target.value.toUpperCase())}
-        className="border border-gray-300 rounded-l-md p-2 w-64 text-gray-700 focus:outline-none"
+        className="searchbar-input"
       />
-      <button
-        onClick={handleSearch}
-        className="bg-blue-600 text-white px-4 rounded-r-md hover:bg-blue-700"
-      >
+      <button onClick={handleSearch} className="searchbar-button">
         Search
       </button>
     </div>
