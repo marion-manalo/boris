@@ -9,6 +9,7 @@ interface ItemProps {
       companyName: string;
       stockValue: string;
       logoURL: string;
+      description: string;
     };
 }
 
@@ -21,6 +22,7 @@ const Item = ({ item }: ItemProps) => {
       <h2 className={styles.companyName}>{item.companyName}</h2>
       <h2 className={styles.ticker}>{item.ticker}</h2>
       <h2 className={styles.stockValue}>{item.stockValue}</h2>
+      <p className={styles.description}>{item.description}</p>
     </Card>
   );
 };
