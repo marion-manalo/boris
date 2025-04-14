@@ -12,7 +12,7 @@ const middleware = async (request: NextRequest) => {
     console.log(isAuthenticated, pathname);
 
     // add routes here if they are meant to be public (would probably include contact later once implemented)
-    const publicPaths = ["/", "/login", "/signup"];
+    const publicPaths = ["/", "/login", "/signup", "/about"];
 
     if (!isAuthenticated && !publicPaths.includes(pathname)) {
         return NextResponse.redirect(new URL("/", request.url));
@@ -25,7 +25,7 @@ const middleware = async (request: NextRequest) => {
 // the reports route would probably go here too
 export const config = {
     matcher: [
-        "/about"
+        "/reports"
     ]
 };
 
