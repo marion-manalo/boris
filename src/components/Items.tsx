@@ -16,12 +16,9 @@ const Items = () => {
     return (
     
         <section className='px-4 py-6'>
+            <Searchbar handleSearch ={handleAddItem}/>
             <div className='container-xl lg:container m-auto px-4 py-6'>
-              
-                <Card>
-                    <Searchbar handleSearch ={handleAddItem}/>
-                </Card>
-
+                
                 {StockItems.length === 0 ? (
                     <p>No stocks in portoflio.</p>
                 ) : (
