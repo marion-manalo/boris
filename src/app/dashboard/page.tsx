@@ -1,12 +1,14 @@
-import Searchbar from "@/components/Searchbar";
+import './Dash.css';
+import Items from '@/components/Items';
 
-export default function Dashboard() {
-    return (
-        <main className="min-h-screen bg-gray-100">
-        <div className="flex flex-col items-center">
-            <h1 className="text-2xl font-bold mb-4">Welcome to the Stock Dashboard</h1>
-            <Searchbar />
-        </div>
-        </main>
-    );
+export default function PublicDash() {
+  return (
+    <main className="publicdash-main">
+      <div className="publicdash-container">
+        <h1 className="publicdash-title">Welcome to the Stock Dashboard</h1>
+        <p className="publicdash-p">Welcome, UserName.</p>
+        <Items />
+      </div>
+    </main>
+  );
 }
