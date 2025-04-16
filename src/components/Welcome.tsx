@@ -2,12 +2,16 @@
 
 import './Welcome.css';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 const Welcome = () => {
   const router = useRouter();
+  const { data: session, status } = useSession();
+
+  const isLoggedIn = status === 'authenticated';
 
   const handleRedirect = () => {
-    router.push('/public');
+    router.push(isLoggedIn ? '/dashboard' : '/login');
   };
 
   return (
@@ -19,11 +23,11 @@ const Welcome = () => {
         Get current insights on any stock and view recent company expense reports.
       </p>
       <h6 className="welcome-subtitle">
-        Press the button below to get started.
+        {isLoggedIn ? "Get started!" : "Log in to get started!."}
       </h6>
 
       <button className="welcome-button" onClick={handleRedirect}>
-        Go to Public Page
+        {isLoggedIn ? "View Dashboard" : "Log in"}
       </button>
     </div>
   );
