@@ -6,6 +6,8 @@ export interface IReport extends Document {
   description: string;
   logoURL: string;
   notes: string;
+  reportType: '10-K' | '8-K';
+  summary?: string;          
   createdAt: Date;
 }
 
@@ -13,7 +15,7 @@ const reportSchema = new Schema<IReport>(
   {
     userId: {
       type: Schema.Types.ObjectId,
-      ref: 'User', // reference to the user model
+      ref: 'User',
       required: true,
     },
     ticker: {
@@ -31,6 +33,15 @@ const reportSchema = new Schema<IReport>(
     notes: {
       type: String,
       required: true,
+    },
+    reportType: {
+      type: String,
+      enum: ['10-K', '8-K'],
+      required: true,
+    },
+    summary: {
+      type: String,
+      required: false,
     },
     createdAt: {
       type: Date,

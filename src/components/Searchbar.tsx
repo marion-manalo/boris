@@ -6,13 +6,15 @@ import { useRouter } from 'next/navigation';
 import './Searchbar.css';
 
 interface Report {
-  _id: string; 
+  _id: string;
   userId: string;
   ticker: string;
   logoURL: string;
   description: string;
   notes: string;
-  createdAt: string;
+  reportType: '10-K' | '8-K';
+  createdAt?: string;
+  summary?: string;
 }
 
 interface SearchbarProps {
@@ -21,7 +23,8 @@ interface SearchbarProps {
 
 const Searchbar = ({ handleSearch }: SearchbarProps) => {
   const [ticker, setTicker] = useState('');
-  const { data: session, status } = useSession();
+  const [reportType, setReportType] = useState<'10-K' | '8-K'>('10-K');
+  const { data: session } = useSession();
   const router = useRouter();
 
   const onSearchClick = async () => {
@@ -32,12 +35,13 @@ const Searchbar = ({ handleSearch }: SearchbarProps) => {
       return;
     }
 
-    const newItem: Omit<Report, '_id' | 'createdAt'> = {
+    const newItem: Omit<Report, '_id' | 'createdAt' | 'summary'> = {
       userId: session.user.id,
       ticker: ticker.toUpperCase(),
       logoURL: 'https://placehold.co/100x100',
       description: `This is a sample description for ${ticker.toUpperCase()}.`,
-      notes: 'Add your personal notes here...'
+      notes: 'Add your personal notes here...',
+      reportType, 
     };
 
     try {
@@ -56,7 +60,7 @@ const Searchbar = ({ handleSearch }: SearchbarProps) => {
       const savedReport: Report = await res.json();
       console.log('Saved report:', savedReport);
 
-      handleSearch(savedReport); // Pass the complete report (with _id) back to Items
+      handleSearch(savedReport);
       setTicker('');
     } catch (err) {
       console.error('Error posting report:', err);
@@ -72,6 +76,16 @@ const Searchbar = ({ handleSearch }: SearchbarProps) => {
         onChange={(e) => setTicker(e.target.value.toUpperCase())}
         className="searchbar-input"
       />
+
+      <select
+        value={reportType}
+        onChange={(e) => setReportType(e.target.value as '10-K' | '8-K')}
+        className="searchbar-dropdown"
+      >
+        <option value="10-K">10-K</option>
+        <option value="8-K">8-K</option>
+      </select>
+
       <button onClick={onSearchClick} className="searchbar-button">
         Add
       </button>

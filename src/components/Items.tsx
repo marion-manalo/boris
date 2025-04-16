@@ -13,7 +13,9 @@ interface Report {
   logoURL: string;
   description: string;
   notes: string;
-  createdAt: string;
+  reportType: '10-K' | '8-K';
+  createdAt?: string;
+  summary?: string;
 }
 
 const Items = () => {

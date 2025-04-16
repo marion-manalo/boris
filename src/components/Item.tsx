@@ -12,6 +12,7 @@ interface ItemProps {
     logoURL: string;
     description: string;
     notes: string;
+    reportType: '10-K' | '8-K';
     createdAt?: string;
   };
 }
