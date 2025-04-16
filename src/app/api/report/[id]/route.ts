@@ -30,3 +30,26 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ message: 'Server error' }, { status: 500 });
   }
 }
+
+export async function GET(request: NextRequest) {
+    try {
+      await connectMongoDB();
+  
+      const id = request.nextUrl.pathname.split('/').pop(); // extract the [id]
+  
+      if (!id) {
+        return NextResponse.json({ message: 'Missing report ID' }, { status: 400 });
+      }
+  
+      const report = await Report.findById(id);
+  
+      if (!report) {
+        return NextResponse.json({ message: 'Report not found' }, { status: 404 });
+      }
+  
+      return NextResponse.json(report, { status: 200 });
+    } catch (error) {
+      console.error('Error fetching report:', error);
+      return NextResponse.json({ message: 'Server error' }, { status: 500 });
+    }
+  }

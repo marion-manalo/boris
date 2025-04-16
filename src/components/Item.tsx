@@ -48,6 +48,7 @@ const Item = ({ item }: ItemProps) => {
       className="item-card"
       logoURL={logoURL}
       notes={notes}
+      reportId={item._id}
       onUpdate={handleUpdate}
     >
       <div className="item-image-container">

@@ -1,3 +1,4 @@
+import { useRouter } from 'next/navigation';
 import { useState } from "react";
 import "./Card.css";
 
@@ -6,17 +7,23 @@ interface CardProps {
   className?: string;
   logoURL: string;
   notes: string;
+  reportId: string; // 👈 new
   onUpdate: (data: { logoURL: string; notes: string }) => void;
 }
 
-const Card = ({ children, className = "", logoURL, notes, onUpdate }: CardProps) => {
+const Card = ({ children, className = "", logoURL, notes, reportId, onUpdate }: CardProps) => {
   const [editMode, setEditMode] = useState(false);
   const [tempLogoURL, setTempLogoURL] = useState(logoURL);
   const [tempNotes, setTempNotes] = useState(notes);
+  const router = useRouter(); // 👈 init router
 
   const handleSave = () => {
     onUpdate({ logoURL: tempLogoURL, notes: tempNotes });
     setEditMode(false);
+  };
+
+  const handleViewReport = () => {
+    router.push(`/dashboard/${reportId}`);
   };
 
   return (
@@ -47,9 +54,9 @@ const Card = ({ children, className = "", logoURL, notes, onUpdate }: CardProps)
         {!editMode ? (
           <button className='card-button' onClick={() => setEditMode(true)}>Edit Card</button>
         ) : (
-          <button className='card-button'onClick={handleSave}>Save Changes</button>
+          <button className='card-button' onClick={handleSave}>Save Changes</button>
         )}
-        <button className='card-button'>View Report</button>
+        <button className='card-button' onClick={handleViewReport}>View Report</button>
       </div>
     </div>
   );
