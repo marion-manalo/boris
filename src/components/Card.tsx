@@ -45,11 +45,11 @@ const Card = ({ children, className = "", logoURL, notes, onUpdate }: CardProps)
 
       <div className="button-div">
         {!editMode ? (
-          <button onClick={() => setEditMode(true)}>Edit Card</button>
+          <button className='card-button' onClick={() => setEditMode(true)}>Edit Card</button>
         ) : (
-          <button onClick={handleSave}>Save Changes</button>
+          <button className='card-button'onClick={handleSave}>Save Changes</button>
         )}
-        <button>View Report</button>
+        <button className='card-button'>View Report</button>
       </div>
     </div>
   );
