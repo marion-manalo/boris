@@ -12,6 +12,7 @@ interface NewItem {
   stockValue: number;
   logoURL: string;
   description: string;
+  notes: string;
 }
 
 interface SearchbarProps {
@@ -34,6 +35,7 @@ const Searchbar = ({ handleSearch }: SearchbarProps) => {
       stockValue: Math.floor(Math.random() * 1000),
       logoURL: 'https://placehold.co/100x100',
       description: `This is a sample description for ${ticker.toUpperCase()}.`,
+      notes: 'Add your personal notes here..."'
     };
 
     handleSearch(newItem);
