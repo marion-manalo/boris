@@ -1,3 +1,5 @@
+// Card.tsx
+
 import { useRouter } from 'next/navigation';
 import { useState } from "react";
 import "./Card.css";
@@ -7,15 +9,16 @@ interface CardProps {
   className?: string;
   logoURL: string;
   notes: string;
-  reportId: string; // 👈 new
+  reportId: string;
   onUpdate: (data: { logoURL: string; notes: string }) => void;
+  onDelete: () => void; // 👈 new delete handler
 }
 
-const Card = ({ children, className = "", logoURL, notes, reportId, onUpdate }: CardProps) => {
+const Card = ({ children, className = "", logoURL, notes, reportId, onUpdate, onDelete }: CardProps) => {
   const [editMode, setEditMode] = useState(false);
   const [tempLogoURL, setTempLogoURL] = useState(logoURL);
   const [tempNotes, setTempNotes] = useState(notes);
-  const router = useRouter(); // 👈 init router
+  const router = useRouter();
 
   const handleSave = () => {
     onUpdate({ logoURL: tempLogoURL, notes: tempNotes });
@@ -27,9 +30,14 @@ const Card = ({ children, className = "", logoURL, notes, reportId, onUpdate }: 
   };
 
   return (
-    <div className={`card ${className}`}>
+    <div className={`card ${className}`} style={{ position: 'relative' }}>
+      {/* Delete Button */}
+      <button className="delete-button" onClick={onDelete}>
+        ✕
+      </button>
+
       {children}
-      
+
       {editMode && (
         <div className="edit-section">
           <div>

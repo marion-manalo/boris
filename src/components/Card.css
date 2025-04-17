@@ -23,3 +23,27 @@
   justify-content: center;
   margin: .8rem;
 }
+
+.delete-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #c2c2c2;
+  color: white;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.delete-button:hover {
+  background-color: #d32f2f;
+}
