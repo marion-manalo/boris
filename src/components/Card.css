@@ -11,7 +11,7 @@
   padding: .3rem;
 }
 
-button:hover {
+.card-button:hover {
   background-color: grey;
 }
 
