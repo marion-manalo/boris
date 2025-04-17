@@ -1,35 +1,75 @@
 'use client';
-import StockItemsInit from "../SamplePortfolio.json";
-import Item from "./Item";
-import Searchbar from "./Searchbar";
-import { useState } from 'react';
-import './Items.css'; // 👈 import CSS
+import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import Item from './Item';
+import Searchbar from './Searchbar';
+import './Items.css';
+
+interface Report {
+  _id: string;
+  userId: string;
+  ticker: string;
+  logoURL: string;
+  description: string;
+  notes: string;
+  reportType: '10-K' | '8-K';
+  createdAt?: string;
+  summary?: string;
+}
 
 const Items = () => {
-  const [StockItems, setStockItems] = useState(StockItemsInit);
+  const [stockItems, setStockItems] = useState<Report[]>([]);
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
-  const handleAddItem = (newItem: typeof StockItemsInit[0]) => {
+  // Fetch user's reports from backend
+  useEffect(() => {
+    const fetchReports = async () => {
+      if (status === 'authenticated' && session?.user?.id) {
+        try {
+          const res = await fetch(`/api/report?userId=${session.user.id}`);
+          const data = await res.json();
+          setStockItems(data);
+        } catch (err) {
+          console.error('Error fetching reports:', err);
+        }
+      }
+    };
+
+    fetchReports();
+  }, [status, session]);
+
+  const handleAddItem = (newItem: Report) => {
     setStockItems(prevItems => [...prevItems, newItem]);
   };
 
+  if (status === 'loading') {
+    return <p>Loading...</p>;
+  }
+
+  if (status === 'unauthenticated') {
+    router.push('/login');
+    return null;
+  }
+
   return (
     <section className="items-section">
-        <div className="searchbar-wrapper">
-            <Searchbar handleSearch={handleAddItem} />
-        </div>
-        <div className="items-container">
-            {StockItems.length === 0 ? (
-            <p>No stocks in portfolio.</p>
-    ) : (
-        <div className="items-grid">
-            {StockItems.map((item) => (
-                <Item key={item._id} item={item} />
+      <div className="searchbar-wrapper">
+        <Searchbar handleSearch={handleAddItem} />
+      </div>
+      <div className="items-container">
+        {stockItems.length === 0 ? (
+          <p>No stocks in portfolio.</p>
+        ) : (
+          <div className="items-grid">
+            {stockItems.map((item) => (
+              <Item key={item._id} item={item} />
             ))}
-        </div>
-    )}
-  </div>
-</section>
-
+          </div>
+        )}
+      </div>
+    </section>
   );
 };
 

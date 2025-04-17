@@ -1,29 +1,66 @@
+'use client';
 import Image from "next/image";
 import Card from "./Card";
+import { useState } from "react";
 import "./Item.css";
 
 interface ItemProps {
-    item: {
-      _id: number;
-      ticker: string;
-      companyName: string;
-      stockValue: number;
-      logoURL: string;
-      description: string;
-    };
+  item: {
+    _id: string;  
+    userId: string;
+    ticker: string;
+    logoURL: string;
+    description: string;
+    notes: string;
+    reportType: '10-K' | '8-K';
+    createdAt?: string;
+  };
 }
 
 const Item = ({ item }: ItemProps) => {
-    return (
-      <Card className="item-card">
-        <div className="item-image-container">
-            <Image src={item.logoURL} alt={item.companyName} fill className="item-image" />
-        </div>
-        <h2 className="item-company-name">{item.companyName}</h2>
-        <h2 className="item-ticker">{item.ticker}</h2>
-        <h2 className="item-stock-value">{item.stockValue}</h2>
-        <p className="item-description">{item.description}</p>
-      </Card>
+  const [logoURL, setLogoURL] = useState(item.logoURL);
+  const [notes, setNotes] = useState(item.notes);
+
+  const handleUpdate = async (updates: { logoURL: string; notes: string }) => {
+    try {
+      const res = await fetch(`/api/report/${item._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updates),
+      });
+  
+      if (!res.ok) {
+        throw new Error(`Failed to update. Status: ${res.status}`);
+      }
+  
+      const updated = await res.json();
+      setLogoURL(updated.logoURL);
+      setNotes(updated.notes);
+    } catch (err) {
+      console.error('Update failed:', err);
+    }
+  };
+  
+
+  return (
+    <Card
+      className="item-card"
+      logoURL={logoURL}
+      notes={notes}
+      reportId={item._id}
+      onUpdate={handleUpdate}
+    >
+      <div className="item-image-container">
+        <Image src={logoURL} alt={item.ticker} fill className="item-image" />
+      </div>
+      {/* <h2 className="item-company-name">{item.companyName}</h2> */}
+      <h2 className="item-ticker">{item.ticker}</h2>
+      {/* <h2 className="item-stock-value">{item.stockValue}</h2> */}
+      <p className="item-description">{item.description}</p>
+      <p className="item-notes"><strong>Notes:</strong> {notes}</p>
+    </Card>
   );
 };
 

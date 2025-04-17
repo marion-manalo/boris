@@ -2,35 +2,27 @@
     {
         "_id": 1,
         "ticker": "AAPL",
-        "companyName": "Apple Inc.",
-        "stockValue": 205.56,
         "logoURL": "https://logo.clearbit.com/apple.com",
-        "description": "Apple Inc. is an American multinational technology company headquartered in Cupertino, California, that designs, develops, and sells consumer electronics, computer software, and online services."
+        "description": "Apple Inc. is an American multinational technology company headquartered in Cupertino, California, that designs, develops, and sells consumer electronics, computer software, and online services.",
+        "notes": "Add your personal notes here..."
     },
     {
         "_id": 2,
         "ticker": "MSFT",
-        "companyName": "Microsoft Inc.",
-        "stockValue": 387.81,
         "logoURL": "https://logo.clearbit.com/microsoft.com",
-        "description": "Microsoft Corporation is an American multinational technology corporation that produces computer software, consumer electronics, personal computers, and related services."
+        "description": "Microsoft Corporation is an American multinational technology corporation that produces computer software, consumer electronics, personal computers, and related services.",
+        "notes": "Add your personal notes here..."
+
     },
     {
         "_id": 3,
         "ticker": "GOOG",
-        "companyName": "Alphabet Inc.",
-        "stockValue": 161.47,
         "logoURL": "https://logo.clearbit.com/google.com",
-        "description": "Alphabet Inc. is an American multinational conglomerate headquartered in Mountain View, California. It is the parent company of Google and several other businesses."
-    },
-    
-    {
-        "_id": 4,
-        "ticker": "AMZN",
-        "companyName": "Amazon.com Inc.",
-        "stockValue": 182.37,
-        "logoURL": "https://logo.clearbit.com/amazon.com",
-        "description": "Amazon.com, Inc. is an American multinational technology company based in Seattle, Washington, that focuses on e-commerce, cloud computing, digital streaming, and artificial intelligence."
+        "description": "Alphabet Inc. is an American multinational conglomerate headquartered in Mountain View, California. It is the parent company of Google and several other businesses.",
+        "notes": "Add your personal notes here..."
+
     }
+    
+   
 
 ]

@@ -1,8 +1,9 @@
 import Welcome from "./Welcome";
+import './Splash.css'
 
 const Splash = () => {
   return (
-    <div className="flex flex-col items-start justify-center h-screen bg-gray-100">
+    <div className="splash-container">
       <Welcome />
     </div>
   );
