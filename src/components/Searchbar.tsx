@@ -29,43 +29,90 @@ const Searchbar = ({ handleSearch }: SearchbarProps) => {
 
   const onSearchClick = async () => {
     if (!ticker.trim()) return;
-
+  
+    const tickerToCheck = ticker.toUpperCase();
+  
+    try {
+      const tickersRes = await fetch('/api/tickers');
+      const tickersList = await tickersRes.json();
+  
+      const valid = tickersList.some((entry: any) => entry.ticker === tickerToCheck);
+  
+      if (!valid) {
+        alert(`${tickerToCheck} is not a recognized stock ticker.`);
+        return;
+      }
+    } catch (err) {
+      console.error('Error validating ticker:', err);
+      alert('There was an error checking the ticker list.');
+      return;
+    }
+  
     if (!session?.user?.id) {
       router.push('/login');
       return;
     }
-
+  
     const newItem: Omit<Report, '_id' | 'createdAt' | 'summary'> = {
       userId: session.user.id,
-      ticker: ticker.toUpperCase(),
-      logoURL: 'https://placehold.co/100x100',
-      description: `This is a sample description for ${ticker.toUpperCase()}.`,
+      ticker: tickerToCheck,
+      logoURL: 'https://www.svgrepo.com/show/508699/landscape-placeholder.svg',
+      description: `This is a sample description for ${tickerToCheck}.`,
       notes: 'Add your personal notes here...',
-      reportType, 
+      reportType,
     };
-
+  
     try {
+      // Step 1: Save report
       const res = await fetch('/api/report', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newItem)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newItem),
       });
-
+  
       if (!res.ok) {
         throw new Error(`Failed to save report. Status: ${res.status}`);
       }
-
+  
       const savedReport: Report = await res.json();
       console.log('Saved report:', savedReport);
-
-      handleSearch(savedReport);
+  
+      // Step 2: Generate summary via SEC + Gemini
+      const summaryRes = await fetch(
+        `/api/summary?ticker=${savedReport.ticker}&formType=${savedReport.reportType}`
+      );
+  
+      if (!summaryRes.ok) {
+        console.warn('Summary generation failed or is unavailable.');
+        handleSearch(savedReport); // fallback to basic report
+        setTicker('');
+        return;
+      }
+  
+      const { summary } = await summaryRes.json();
+  
+      // Step 3: Update the report with the summary
+      const updateRes = await fetch(`/api/report/${savedReport._id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ summary }),
+      });
+  
+      if (!updateRes.ok) {
+        console.warn('Failed to update report with summary.');
+        handleSearch(savedReport); // fallback if update fails
+        setTicker('');
+        return;
+      }
+  
+      const updatedReport = await updateRes.json();
+      handleSearch(updatedReport);
       setTicker('');
     } catch (err) {
-      console.error('Error posting report:', err);
+      console.error('Error during full report + summary flow:', err);
     }
   };
+  
 
   return (
     <div className="searchbar-container">

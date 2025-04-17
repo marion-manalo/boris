@@ -6,19 +6,15 @@ export async function PUT(request: NextRequest) {
   try {
     await connectMongoDB();
 
-    const id = request.nextUrl.pathname.split('/').pop(); 
+    const id = request.nextUrl.pathname.split('/').pop();
+    const { logoURL, notes, summary } = await request.json(); 
 
-    if (!id) {
-      return NextResponse.json({ message: 'Missing report ID in URL' }, { status: 400 });
-    }
+    const updateData: any = {};
+    if (logoURL !== undefined) updateData.logoURL = logoURL;
+    if (notes !== undefined) updateData.notes = notes;
+    if (summary !== undefined) updateData.summary = summary; 
 
-    const { logoURL, notes } = await request.json();
-
-    const updatedReport = await Report.findByIdAndUpdate(
-      id,
-      { logoURL, notes },
-      { new: true }
-    );
+    const updatedReport = await Report.findByIdAndUpdate(id, updateData, { new: true });
 
     if (!updatedReport) {
       return NextResponse.json({ message: 'Report not found' }, { status: 404 });
@@ -35,7 +31,7 @@ export async function GET(request: NextRequest) {
     try {
       await connectMongoDB();
   
-      const id = request.nextUrl.pathname.split('/').pop(); // extract the [id]
+      const id = request.nextUrl.pathname.split('/').pop(); 
   
       if (!id) {
         return NextResponse.json({ message: 'Missing report ID' }, { status: 400 });
