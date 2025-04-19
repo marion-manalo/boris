@@ -71,6 +71,7 @@ const Item = ({ item }: ItemProps) => {
       notes={notes}
       reportId={item._id}
       onUpdate={handleUpdate}
+      onDelete={() => {}}
     >
       <div className="item-image-container">
         <Image src={logoURL} alt={item.ticker} fill className="item-image" />

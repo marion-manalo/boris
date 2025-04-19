@@ -1,7 +1,7 @@
 // Card.tsx
 
 import { useRouter } from 'next/navigation';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Card.css";
 
 interface CardProps {
@@ -9,9 +9,9 @@ interface CardProps {
   className?: string;
   logoURL: string;
   notes: string;
-  reportId: string;
+  reportId: string; 
   onUpdate: (data: { logoURL: string; notes: string }) => void;
-  onDelete: () => void; // 👈 new delete handler
+  onDelete: () => void; 
 }
 
 const Card = ({ children, className = "", logoURL, notes, reportId, onUpdate, onDelete }: CardProps) => {
