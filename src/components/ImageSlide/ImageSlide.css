@@ -7,10 +7,10 @@
   }
   
   .image-burst-main {
-    width: 6.25rem;
-    height: 6.25rem;
-    border-radius: 50%;
-    border: 1px solid black;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 20px;
+    border: 1px solid #ccc;
     position: relative;
     z-index: 2;
     display: block;
@@ -29,9 +29,9 @@
   }
   
   .image-burst-inner {
-    width: 9rem;
-    height: 9rem;
-    border-radius: 50%;
+    max-width: 15rem;
+    max-height: 15rem;
+    border-radius: 10px;
     display: block;
     margin: 0 auto;
     border: 1px solid #ccc;
@@ -54,8 +54,8 @@
     to {
       opacity: 1;
       transform: translate(
-        calc(-50% + var(--slide-offset) * 10rem),
-        8rem
+        calc(-50% + var(--slide-offset) * 18rem),
+        12rem
       );
     }
   }

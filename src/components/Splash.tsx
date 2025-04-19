@@ -2,7 +2,10 @@ import Welcome from "./Welcome";
 import './Splash.css';
 import borisStyle from '@/assets/boris-style.png';
 import boris from '@/assets/boris.png';
+import login from '@/assets/login.png';
+import view from '@/assets/view-report.png';
 import dash from '@/assets/Dashboard.png';
+import report from '@/assets/styled-report.png';
 import ImageSlide from './ImageSlide/ImageSlide';
 
 const Splash = () => {
@@ -13,24 +16,24 @@ const Splash = () => {
       description: '',
     },
     {
-      image: dash,
+      image: login,
       title: 'Step 1',
-      description: 'Generate reports with real-time financial data.',
+      description: 'Log in / Create an account',
     },
     {
-      image: borisStyle,
+      image: dash,
       title: 'Step 2',
-      description: 'Track company performance with interactive charts.',
+      description: 'Enter a stock ticker and a type of filing.',
     },
     {
-      image: borisStyle,
+      image: view,
       title: 'Step 3',
-      description: 'Easily share with investors and collaborators.',
+      description: 'View report',
     },
     {
-      image: boris,
+      image: report,
       title: 'Step 4',
-      description: 'Build tailored metrics with intuitive tools.',
+      description: 'Learn about companies and what different data means!',
     },
   ];
 
