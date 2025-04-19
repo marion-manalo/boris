@@ -7,7 +7,15 @@ export async function POST(request: NextRequest) {
     await connectMongoDB();
 
     const body = await request.json();
-    const { userId, ticker, description, logoURL, notes, reportType } = body;
+    const {
+      userId,
+      ticker,
+      description,
+      logoURL,
+      notes,
+      reportType,
+      stockData, 
+    } = body;
 
     if (!userId || !ticker || !description || !logoURL || !notes || !reportType) {
       return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
@@ -19,7 +27,8 @@ export async function POST(request: NextRequest) {
       description,
       logoURL,
       notes,
-      reportType, 
+      reportType,
+      stockData, 
     });
 
     return NextResponse.json(newReport, { status: 201 });

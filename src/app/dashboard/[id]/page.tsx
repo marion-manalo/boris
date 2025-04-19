@@ -1,11 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useParams } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
-import InfoIcon from './../../../components/ICard/ICard'
-
+import InfoIcon from '@/components/ICard/ICard';
 
 interface Report {
   _id: string;
@@ -16,36 +14,25 @@ interface Report {
   notes: string;
   createdAt?: string;
   summary?: string;
+  stockData?: {
+    price: number;
+    marketCap: number;
+    companyName: string;
+    beta: number;
+    volume: number;
+    change: number;
+    range: string;
+    dividend: number;
+    sector: string;
+    dcf: number;
+  };
 }
-
-
-// added interface for stock data (FMP api)
-interface StockData {
-  price: number;
-  marketCap: number;
-  companyName: string;
-  beta: number;
-  volume: number;
-  change: number;
-
-  range: number;
-  dividend: number;
-
-  sector: string;
-
-  city: string;
-  state: string;
-
-  dcf: number; // use to calculate if stock is overvalued or not
-}
-
 
 const ReportPage = () => {
   const { id } = useParams();
   const router = useRouter();
   const [report, setReport] = useState<Report | null>(null);
   const [loading, setLoading] = useState(true);
-  const [stockData, setStockData] = useState<StockData | null>(null);
 
   useEffect(() => {
     const fetchReport = async () => {
@@ -59,71 +46,35 @@ const ReportPage = () => {
         setLoading(false);
       } catch (error) {
         console.error(error);
-        router.push('/dashboard'); // fallback
+        router.push('/dashboard');
       }
     };
 
     fetchReport();
   }, [id, router]);
 
-  // added fetch for FMP api - stock data
-  useEffect(() => {
-    const fetchStockData = async () => {
-      if (!report) return;
-
-      try {
-        const res = await fetch(`https://financialmodelingprep.com/api/v3/profile/${report.ticker}?apikey=2Hey2f7sBndBUkPFmYt5FFNchnjCoHMo`);
-        if (!res.ok) {
-          throw new Error('Failed to fetch report (stock data)');
-        }
-        const data = await res.json();
-        const companyProfile = data[0];
-
-        setStockData({
-          price: companyProfile.price,
-          marketCap: companyProfile.mktCap,
-          companyName: companyProfile.companyName,
-          beta: companyProfile.beta,
-          volume: companyProfile.volAvg,
-          change: companyProfile.changes,
-
-          range: companyProfile.range,
-          dividend: companyProfile.lastDiv,
-          sector: companyProfile.sector,
-          city: companyProfile.city,
-          state: companyProfile.state,
-          dcf: companyProfile.dcf
-        });
-      } catch (error) {
-        console.error("stock data: ", error);
-      }
-    };
-
-    fetchStockData();
-
-  }, [report]);
-
   if (loading) return <p>Loading report...</p>;
   if (!report) return <p>Report not found.</p>;
 
   return (
     <div className="report-page">
-      <h1>Report for <strong>{stockData?.companyName}</strong>({report.ticker})</h1>
+      <h1>
+        Report for <strong>{report.stockData?.companyName || report.ticker}</strong>
+        {report.stockData?.companyName && ` (${report.ticker})`}
+      </h1>
+
       <div className="report-card">
         <div className="report-logo">
           <Image src={report.logoURL} alt={report.ticker} width={100} height={100} />
         </div>
 
-        <br></br>
-
         <p><strong>Description:</strong> {report.description}</p>
         <p><strong>Notes:</strong> {report.notes}</p>
 
+        {/* Summary Section */}
         {report.summary && (
           <div className="summary-section">
             <h2>Summary</h2>
-
-            {/* Extract and render the intro line separately */}
             {(() => {
               const lines = report.summary.split('\n').filter(Boolean);
               const intro = lines[0];
@@ -147,6 +98,24 @@ const ReportPage = () => {
                 </>
               );
             })()}
+          </div>
+        )}
+
+        {/* Stock Data Section */}
+        {report.stockData && (
+          <div className="stock-section">
+            <h2>Stock Details</h2>
+            <ul>
+              <li><strong>Price:</strong> ${report.stockData.price.toFixed(2)}</li>
+              <li><strong>Market Cap:</strong> ${report.stockData.marketCap.toLocaleString()}</li>
+              <li><strong>Beta:</strong> {report.stockData.beta}</li>
+              <li><strong>Volume:</strong> {report.stockData.volume.toLocaleString()}</li>
+              <li><strong>Change:</strong> {report.stockData.change.toFixed(2)}%</li>
+              <li><strong>Range:</strong> {report.stockData.range}</li>
+              <li><strong>Dividend:</strong> ${report.stockData.dividend}</li>
+              <li><strong>Sector:</strong> {report.stockData.sector}</li>
+              <li><strong>DCF (Discounted Cash Flow):</strong> ${report.stockData.dcf.toFixed(2)}</li>
+            </ul>
           </div>
         )}
       </div>

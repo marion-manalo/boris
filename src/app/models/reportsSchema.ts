@@ -9,6 +9,18 @@ export interface IReport extends Document {
   reportType: '10-K' | '8-K';
   summary?: string;          
   createdAt: Date;
+  stockData?: {
+    price: number;
+    marketCap: number;
+    companyName: string;
+    beta: number;
+    volume: number;
+    change: number;
+    range: string;
+    dividend: number;
+    sector: string;
+    dcf: number;
+  };
 }
 
 const reportSchema = new Schema<IReport>(
@@ -42,6 +54,18 @@ const reportSchema = new Schema<IReport>(
     summary: {
       type: String,
       required: false,
+    },
+    stockData: {
+      price: Number,
+      marketCap: Number,
+      companyName: String,
+      beta: Number,
+      volume: Number,
+      change: Number,
+      range: String,
+      dividend: Number,
+      sector: String,
+      dcf: Number,
     },
     createdAt: {
       type: Date,
