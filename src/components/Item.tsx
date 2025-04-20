@@ -6,7 +6,7 @@ import "./Item.css";
 
 interface ItemProps {
   item: {
-    _id: string;  
+    _id: string;
     userId: string;
     ticker: string;
     logoURL: string;
@@ -24,7 +24,7 @@ const Item = ({ item, onDelete }: ItemProps) => {
   const [notes, setNotes] = useState(item.notes);
 
   // stock data
-  const [stockData, setStockData] = useState<{ price: number } | null>(null);
+  const [stockData, setStockData] = useState<{ price: number, change: number, companyName: string } | null>(null);
 
   const handleUpdate = async (updates: { logoURL: string; notes: string }) => {
     try {
@@ -35,11 +35,11 @@ const Item = ({ item, onDelete }: ItemProps) => {
         },
         body: JSON.stringify(updates),
       });
-  
+
       if (!res.ok) {
         throw new Error(`Failed to update. Status: ${res.status}`);
       }
-  
+
       const updated = await res.json();
       setLogoURL(updated.logoURL);
       setNotes(updated.notes);
@@ -50,13 +50,13 @@ const Item = ({ item, onDelete }: ItemProps) => {
 
   // financial modeling prep (FMP) api implementation
   // places stock "Price: xxx" on item card
-  useEffect( () => {
-    const fetchStockData = async() => {
+  useEffect(() => {
+    const fetchStockData = async () => {
       try {
         const res = await fetch(`https://financialmodelingprep.com/api/v3/profile/${item.ticker}?apikey=2Hey2f7sBndBUkPFmYt5FFNchnjCoHMo`)
         const data = await res.json();
         if (data && data.length > 0) {
-          setStockData({ price: data[0].price });
+          setStockData({ price: data[0].price, change: data[0].changes, companyName: data[0].companyName });
         }
       } catch (err) {
         console.error('Error fetching FMP stock data:', err)
@@ -64,13 +64,13 @@ const Item = ({ item, onDelete }: ItemProps) => {
     };
     fetchStockData();
   }, [item.ticker]);
-  
+
   const handleDelete = async () => {
     try {
       const res = await fetch(`/api/report/${item._id}`, {
         method: 'DELETE',
       });
-  
+
       if (!res.ok) {
         throw new Error(`Failed to delete. Status: ${res.status}`);
       }
@@ -94,12 +94,30 @@ const Item = ({ item, onDelete }: ItemProps) => {
         <Image src={logoURL} alt={item.ticker} fill className="item-image" />
       </div>
       {/* <h2 className="item-company-name">{item.companyName}</h2> */}
-      <h2 className="item-ticker">{item.ticker}</h2>
+      <h2 className="item-ticker"><strong>{stockData?.companyName}</strong> ({item.ticker})</h2>
 
       {/* adding Stock Price to item card*/}
       {stockData && (
-        <p className="item-stock-price">Price: ${stockData.price.toFixed(2)}</p>
+        <p className="item-stock-price">
+          Price: ${stockData.price.toFixed(2)}{' '}
+          {(() => {
+            const previousPrice = stockData.price - stockData.change;
+            const percentChange = (stockData.change / previousPrice) * 100;
+            const changeColor = percentChange >= 0 ? 'green' : 'red';
+            const formattedChange = percentChange.toFixed(2);
+
+            return (
+              <span style={{ color: changeColor }}>
+                {percentChange >= 0 && '+'}
+                {stockData.change.toFixed(2)}
+                {' '}
+                ({formattedChange}%)
+              </span>
+            );
+          })()}
+        </p>
       )}
+
 
       {/* <h2 className="item-stock-value">{item.stockValue}</h2> */}
       <p className="item-description">{item.description}</p>
