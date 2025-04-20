@@ -49,3 +49,15 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: 'Server error' }, { status: 500 });
     }
   }
+  
+  export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+    const reportId = params.id;
+  
+    // DELETE from DB logic goes here
+    try {
+      // e.g. await db.collection('reports').deleteOne({ _id: new ObjectId(reportId) });
+      return NextResponse.json({ success: true });
+    } catch (error) {
+      return new NextResponse('Failed to delete report', { status: 500 });
+    }
+  }

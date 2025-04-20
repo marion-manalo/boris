@@ -53,6 +53,11 @@ const Items = () => {
     return null;
   }
 
+  const handleDeleteItem = (id: string) => {
+    setStockItems(prevItems => prevItems.filter(item => item._id !== id));
+  };
+  
+
   return (
     <section className="items-section">
       <div className="searchbar-wrapper">
@@ -64,7 +69,8 @@ const Items = () => {
         ) : (
           <div className="items-grid">
             {stockItems.map((item) => (
-              <Item key={item._id} item={item} />
+              <Item key={item._id} item={item} onDelete={handleDeleteItem}
+              />
             ))}
           </div>
         )}

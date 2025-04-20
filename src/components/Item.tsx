@@ -15,9 +15,11 @@ interface ItemProps {
     reportType: '10-K' | '8-K';
     createdAt?: string;
   };
+
+  onDelete: (id: string) => void;
 }
 
-const Item = ({ item }: ItemProps) => {
+const Item = ({ item, onDelete }: ItemProps) => {
   const [logoURL, setLogoURL] = useState(item.logoURL);
   const [notes, setNotes] = useState(item.notes);
 
@@ -63,6 +65,21 @@ const Item = ({ item }: ItemProps) => {
     fetchStockData();
   }, [item.ticker]);
   
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(`/api/report/${item._id}`, {
+        method: 'DELETE',
+      });
+  
+      if (!res.ok) {
+        throw new Error(`Failed to delete. Status: ${res.status}`);
+      }
+      onDelete(item._id); // Notify parent to remove from list
+    } catch (err) {
+      console.error("Delete failed:", err);
+    }
+  };
+
 
   return (
     <Card
@@ -71,7 +88,7 @@ const Item = ({ item }: ItemProps) => {
       notes={notes}
       reportId={item._id}
       onUpdate={handleUpdate}
-      onDelete={() => {}}
+      onDelete={handleDelete}
     >
       <div className="item-image-container">
         <Image src={logoURL} alt={item.ticker} fill className="item-image" />
