@@ -50,14 +50,22 @@ export async function GET(request: NextRequest) {
     }
   }
   
-  export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+  export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
     const reportId = params.id;
   
-    // DELETE from DB logic goes here
     try {
-      // e.g. await db.collection('reports').deleteOne({ _id: new ObjectId(reportId) });
-      return NextResponse.json({ success: true });
+      
+      await connectMongoDB(); 
+      const deletedReport = await Report.findByIdAndDelete(reportId);
+
+      if (!deletedReport) {
+        return NextResponse.json({ message: 'Report not found' }, { status: 404 });
+      }
+
+      return NextResponse.json({ message: 'Report deleted successfully' }, { status: 200 });
+      
     } catch (error) {
-      return new NextResponse('Failed to delete report', { status: 500 });
+      console.error('Error deleting report:', error);
+      return NextResponse.json({ message: 'Server error' }, { status: 500 });
     }
   }
