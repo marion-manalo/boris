@@ -54,14 +54,39 @@ const ReportPage = () => {
     fetchReport();
   }, [id, router]);
 
+  // logic for market cap units (shown in stock data section)
+  const formatMarketCap = (cap: number) => {
+    if (cap >= 1_000_000_000_000) {
+      return (cap / 1_000_000_000).toFixed(2) + 'T'
+    } else if (cap >= 1_000_000_000) {
+      return (cap / 1_000_000_000).toFixed(2) + 'B';
+    } else if (cap >= 1_000_000) {
+      return (cap / 1_000_000).toFixed(2) + 'M';
+    }
+    return cap.toLocaleString();
+  };
+
+  // logic for average volume units (also in stock data section)
+  const formatVolume = (volume: number) => {
+    if (volume >= 1_000_000) {
+      return (volume / 1_000_000).toFixed(2) + 'M';
+    } else if (volume >= 1_000) {
+      return (volume / 1_000).toFixed(2) + 'K';
+    }
+    return volume.toString();
+  };
+
+
   if (loading) return <p>Loading report...</p>;
   if (!report) return <p>Report not found.</p>;
 
   return (
     <div className="report-page">
-      <h1>
-        Report for <strong>{report.stockData?.companyName || report.ticker}</strong>
+      <h1 className="title">
+        <strong>{report.stockData?.companyName || report.ticker}</strong>
         {report.stockData?.companyName && ` (${report.ticker})`}
+        <br></br>
+        <span className="date">As of {new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
       </h1>
 
       <div className="report-card">
@@ -72,10 +97,49 @@ const ReportPage = () => {
         <p><strong>Description:</strong> {report.description}</p>
         <p><strong>Notes:</strong> {report.notes}</p>
 
+        <br></br>
+        <hr className="hr" />
+
+        {report.stockData && (
+          <div className="stock-section">
+            <h2 className="section-title"><strong>Key Information</strong></h2>
+            <div className="stock-grid">
+              <div>
+                <strong>Price:</strong> ${report.stockData.price.toFixed(2)}{'  '}
+                {(() => {
+                  const previousPrice = report.stockData.price - report.stockData.change;
+                  const percentChange = (report.stockData.change / previousPrice) * 100;
+                  const changeColor = percentChange >= 0 ? 'green' : 'red';
+                  const formattedChange = percentChange.toFixed(2);
+
+                  return (
+                    <span style={{ color: changeColor }}>
+                      {percentChange >= 0 && '+'}
+                      {report.stockData.change}{'  '}
+                      ({formattedChange}%)
+                    </span>
+                  );
+                })()}
+              </div>
+              <div><strong>Market Cap:</strong> {formatMarketCap(report.stockData.marketCap)}</div>
+              <div><strong>Volume:</strong> {formatVolume(report.stockData.volume)}</div>
+              <div><strong>Beta:</strong> {report.stockData.beta.toFixed(2)}</div>
+              <div><strong>52 Week Range:</strong> {report.stockData.range}</div>
+              <div><strong>Div/Share:</strong> ${report.stockData.dividend.toFixed(2)}</div>
+              <div><strong>Sector:</strong> {report.stockData.sector}</div>
+              <div><strong>DCF Price:</strong> ${report.stockData.dcf.toFixed(2)}</div>
+              <div><strong>Div Yield:</strong> {((report.stockData.dividend / report.stockData.price) * 100).toFixed(2)}%</div>
+            </div>
+          </div>
+        )}
+
+        <br></br>
+        <hr className="hr" />
+
         {/* Summary Section */}
         {report.summary && (
           <div className="summary-section">
-            <h2>Summary</h2>
+            <h2 className="section-title"><strong>10-K Summary</strong></h2>
             {(() => {
               const lines = report.summary.split('\n').filter(Boolean);
               const intro = lines[0];
@@ -99,24 +163,6 @@ const ReportPage = () => {
                 </>
               );
             })()}
-          </div>
-        )}
-
-        {/* Stock Data Section */}
-        {report.stockData && (
-          <div className="stock-section">
-            <h2>Stock Details</h2>
-            <ul>
-              <li><strong>Price:</strong> ${report.stockData.price.toFixed(2)}</li>
-              <li><strong>Market Cap:</strong> ${report.stockData.marketCap.toLocaleString()}</li>
-              <li><strong>Beta:</strong> {report.stockData.beta}</li>
-              <li><strong>Volume:</strong> {report.stockData.volume.toLocaleString()}</li>
-              <li><strong>Change:</strong> {report.stockData.change.toFixed(2)}%</li>
-              <li><strong>Range:</strong> {report.stockData.range}</li>
-              <li><strong>Dividend:</strong> ${report.stockData.dividend}</li>
-              <li><strong>Sector:</strong> {report.stockData.sector}</li>
-              <li><strong>DCF (Discounted Cash Flow):</strong> ${report.stockData.dcf.toFixed(2)}</li>
-            </ul>
           </div>
         )}
       </div>
