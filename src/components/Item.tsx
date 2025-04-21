@@ -135,8 +135,8 @@ const Item = ({ item, onDelete }: ItemProps) => {
         </p>
       )}
 
-      <p className="item-description">{item.description}</p>
-      <p className="item-notes"><strong>Notes:</strong> {notes}</p>
+      {/* <p className="item-description">{item.description}</p> */}
+      <p className="item-description"><strong>Notes:</strong> {notes}</p>
     </Card>
   );
 };

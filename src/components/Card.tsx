@@ -52,7 +52,7 @@ const Card = ({ children, className = "", logoURL, notes, reportId, onUpdate, on
     <div className={`card ${className}`} style={{ position: 'relative' }}>
       {/* Delete Button */}
       <button className="delete-button" onClick={handleDelete}>
-        X
+        ⨯
       </button>
 
       {children}
