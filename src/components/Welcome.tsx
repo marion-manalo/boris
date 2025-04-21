@@ -11,7 +11,7 @@ const Welcome = () => {
   const isLoggedIn = status === 'authenticated';
 
   const handleRedirect = () => {
-    router.push(isLoggedIn ? '/dashboard' : '/login');
+    router.push(isLoggedIn ? '/dashboard' : '/public');
   };
 
   return (
@@ -23,11 +23,11 @@ const Welcome = () => {
         Get current insights on any stock and view recent company expense reports.
       </p>
       <h6 className="welcome-subtitle">
-        {isLoggedIn ? "Get started!" : "Log in to get started!."}
+        {isLoggedIn ? "Get started!" : "Give Boris a sneak peak!"}
       </h6>
 
       <button className="welcome-button" onClick={handleRedirect}>
-        {isLoggedIn ? "View Dashboard" : "Log in"}
+        {isLoggedIn ? "View Dashboard" : "Continue"}
       </button>
     </div>
   );

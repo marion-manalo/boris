@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Card from "./Card";
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import "./Item.css";
 
 interface ItemProps {
@@ -20,13 +21,22 @@ interface ItemProps {
 }
 
 const Item = ({ item, onDelete }: ItemProps) => {
+  const { data: session } = useSession();
   const [logoURL, setLogoURL] = useState(item.logoURL);
   const [notes, setNotes] = useState(item.notes);
 
-  // stock data
-  const [stockData, setStockData] = useState<{ price: number, change: number, companyName: string } | null>(null);
+  const [stockData, setStockData] = useState<{
+    price: number;
+    change: number;
+    companyName: string;
+  } | null>(null);
 
   const handleUpdate = async (updates: { logoURL: string; notes: string }) => {
+    if (!session) {
+      alert("Please log in to update items.");
+      return;
+    }
+
     try {
       const res = await fetch(`/api/report/${item._id}`, {
         method: 'PUT',
@@ -48,24 +58,12 @@ const Item = ({ item, onDelete }: ItemProps) => {
     }
   };
 
-  // financial modeling prep (FMP) api implementation
-  // places stock "Price: xxx" on item card
-  useEffect(() => {
-    const fetchStockData = async () => {
-      try {
-        const res = await fetch(`https://financialmodelingprep.com/api/v3/profile/${item.ticker}?apikey=2Hey2f7sBndBUkPFmYt5FFNchnjCoHMo`)
-        const data = await res.json();
-        if (data && data.length > 0) {
-          setStockData({ price: data[0].price, change: data[0].changes, companyName: data[0].companyName });
-        }
-      } catch (err) {
-        console.error('Error fetching FMP stock data:', err)
-      }
-    };
-    fetchStockData();
-  }, [item.ticker]);
-
   const handleDelete = async () => {
+    if (!session) {
+      alert("Please log in to delete items.");
+      return;
+    }
+
     try {
       const res = await fetch(`/api/report/${item._id}`, {
         method: 'DELETE',
@@ -74,12 +72,33 @@ const Item = ({ item, onDelete }: ItemProps) => {
       if (!res.ok) {
         throw new Error(`Failed to delete. Status: ${res.status}`);
       }
-      onDelete(item._id); // Notify parent to remove from list
+
+      onDelete(item._id);
     } catch (err) {
       console.error("Delete failed:", err);
     }
   };
 
+  useEffect(() => {
+    const fetchStockData = async () => {
+      try {
+        const res = await fetch(
+          `https://financialmodelingprep.com/api/v3/profile/${item.ticker}?apikey=2Hey2f7sBndBUkPFmYt5FFNchnjCoHMo`
+        );
+        const data = await res.json();
+        if (data && data.length > 0) {
+          setStockData({
+            price: data[0].price,
+            change: data[0].changes,
+            companyName: data[0].companyName,
+          });
+        }
+      } catch (err) {
+        console.error('Error fetching FMP stock data:', err);
+      }
+    };
+    fetchStockData();
+  }, [item.ticker]);
 
   return (
     <Card
@@ -93,10 +112,10 @@ const Item = ({ item, onDelete }: ItemProps) => {
       <div className="item-image-container">
         <Image src={logoURL} alt={item.ticker} fill className="item-image" />
       </div>
-      {/* <h2 className="item-company-name">{item.companyName}</h2> */}
-      <h2 className="item-ticker"><strong>{stockData?.companyName}</strong> ({item.ticker})</h2>
+      <h2 className="item-ticker">
+        <strong>{stockData?.companyName}</strong> ({item.ticker})
+      </h2>
 
-      {/* adding Stock Price to item card*/}
       {stockData && (
         <p className="item-stock-price">
           Price: ${stockData.price.toFixed(2)}{' '}
@@ -109,17 +128,13 @@ const Item = ({ item, onDelete }: ItemProps) => {
             return (
               <span style={{ color: changeColor }}>
                 {percentChange >= 0 && '+'}
-                {stockData.change.toFixed(2)}
-                {' '}
-                ({formattedChange}%)
+                {stockData.change.toFixed(2)} ({formattedChange}%)
               </span>
             );
           })()}
         </p>
       )}
 
-
-      {/* <h2 className="item-stock-value">{item.stockValue}</h2> */}
       <p className="item-description">{item.description}</p>
       <p className="item-notes"><strong>Notes:</strong> {notes}</p>
     </Card>

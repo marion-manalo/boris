@@ -1,7 +1,8 @@
-// Card.tsx
+'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useSession } from 'next-auth/react';
 import "./Card.css";
 
 interface CardProps {
@@ -19,20 +20,38 @@ const Card = ({ children, className = "", logoURL, notes, reportId, onUpdate, on
   const [tempLogoURL, setTempLogoURL] = useState(logoURL);
   const [tempNotes, setTempNotes] = useState(notes);
   const router = useRouter();
+  const { status } = useSession();
 
   const handleSave = () => {
+    if (status !== 'authenticated') {
+      setEditMode(false);
+      alert('You must be logged in to save changes.');
+      return;
+    }
     onUpdate({ logoURL: tempLogoURL, notes: tempNotes });
     setEditMode(false);
   };
 
+  const handleDelete = () => {
+    if (status !== 'authenticated') {
+      alert('You must be logged in to delete reports.');
+      return;
+    }
+    onDelete();
+  };
+
   const handleViewReport = () => {
+    if (status !== 'authenticated') {
+      alert('You must be logged in to view reports.');
+      return;
+    }
     router.push(`/dashboard/${reportId}`);
   };
 
   return (
     <div className={`card ${className}`} style={{ position: 'relative' }}>
       {/* Delete Button */}
-      <button className="delete-button" onClick={onDelete}>
+      <button className="delete-button" onClick={handleDelete}>
         X
       </button>
 
