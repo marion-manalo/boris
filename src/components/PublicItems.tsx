@@ -13,35 +13,47 @@ interface Report {
   reportType: '10-K' | '8-K';
   createdAt?: string;
   summary?: string;
+  stockData: {
+    price: number;
+    change: number;
+    companyName: string;
+  };
 }
 
 const PublicItems = () => {
-  const [publicItems, setPublicItems] = useState<Report[]>([]);
-
-  useEffect(() => {
-    const fetchPublicData = async () => {
-      try {
-        const res = await fetch('SamplePortfolio.json'); // Place JSON in `public/data/`
-        const data = await res.json();
-        setPublicItems(data);
-      } catch (err) {
-        console.error('Error loading public data:', err);
-      }
-    };
-
-    fetchPublicData();
-  }, []);
+  const [stockItems, setStockItems] = useState<Report[]>([
+    {
+      _id: '68059eb95708b9bda9d2c721',
+      userId: '67fa749334b6e4c31c059706',
+      ticker: 'GOOG',
+      description: 'This is a sample description for GOOG.',
+      logoURL: 'https://www.svgrepo.com/show/508699/landscape-placeholder.svg',
+      notes: 'Add your personal notes here...',
+      reportType: '10-K',
+      stockData: {
+        price: 153.36,
+        change: -2.14,
+        companyName: 'Alphabet Inc.',
+      },
+      summary: 'This is a summary of GOOG\'s 10-K filing...',
+    },
+  ]);
 
   return (
     <section className="items-section">
-      <h2>Example Reports</h2>
       <div className="items-container">
-        {publicItems.length === 0 ? (
-          <p>No public reports available.</p>
+        {stockItems.length === 0 ? (
+          <p>No stocks available.</p>
         ) : (
           <div className="items-grid">
-            {publicItems.map((item) => (
-              <Item key={item._id} item={item} onDelete={() => {}} />
+            {stockItems.map((item) => (
+              <Item
+                key={item._id}
+                item={item}
+                onDelete={() => {
+                  setStockItems((prevItems) => prevItems.filter((i) => i._id !== item._id));
+                }}
+              />
             ))}
           </div>
         )}
