@@ -23,6 +23,13 @@ const Items = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  // Redirect if unauthenticated
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/public');
+    }
+  }, [status, router]);
+
   // Fetch user's reports from backend
   useEffect(() => {
     const fetchReports = async () => {
@@ -44,19 +51,18 @@ const Items = () => {
     setStockItems(prevItems => [...prevItems, newItem]);
   };
 
+  const handleDeleteItem = (id: string) => {
+    setStockItems(prevItems => prevItems.filter(item => item._id !== id));
+  };
+
   if (status === 'loading') {
     return <p>Loading...</p>;
   }
 
+  // While redirecting, don't show the main content
   if (status === 'unauthenticated') {
-    router.push('/login');
     return null;
   }
-
-  const handleDeleteItem = (id: string) => {
-    setStockItems(prevItems => prevItems.filter(item => item._id !== id));
-  };
-  
 
   return (
     <section className="items-section">
@@ -69,7 +75,10 @@ const Items = () => {
         ) : (
           <div className="items-grid">
             {stockItems.map((item) => (
-              <Item key={item._id} item={item} onDelete={handleDeleteItem}
+              <Item
+                key={item._id}
+                item={item}
+                onDelete={handleDeleteItem}
               />
             ))}
           </div>
