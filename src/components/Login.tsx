@@ -5,21 +5,25 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import './Auth.css';
 
+// states for loginform
 export default function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const router = useRouter();
 
+    // handle clicking submit
     async function handleSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
         setError('');
 
+        // require email and password
         if (!email || !password) {
             setError('Email and password are required.');
             return;
         }
 
+        // try sign in
         try {
             const result = await signIn('credentials', {
                 redirect: false,

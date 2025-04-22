@@ -2,7 +2,7 @@ import Items from "../components/Items";
 import Splash from "../components/Splash";
 import connectMongoDB from "../config/mongodb";
 
-
+// connect to MongoDB and generate splash page
 export default function Home() {
   connectMongoDB();
   

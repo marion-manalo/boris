@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import connectMongoDB from '@/config/mongodb';
 import User from '@/app/models/authSchema';
 
+// create new user in the database
 export async function POST(req: NextRequest) {
     try {
         await connectMongoDB();

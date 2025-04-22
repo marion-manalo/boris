@@ -23,6 +23,7 @@ export interface IReport extends Document {
   };
 }
 
+// schema organization for a new report
 const reportSchema = new Schema<IReport>(
   {
     userId: {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectMongoDB from '@/config/mongodb';
 import Report from '../../../models/reportsSchema';
 
+// put request
 export async function PUT(request: NextRequest) {
   try {
     await connectMongoDB();
@@ -27,6 +28,7 @@ export async function PUT(request: NextRequest) {
   }
 }
 
+// get request
 export async function GET(request: NextRequest) {
     try {
       await connectMongoDB();
@@ -50,6 +52,7 @@ export async function GET(request: NextRequest) {
     }
   }
   
+  // delete request
   export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
     const reportId = params.id;
   

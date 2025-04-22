@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import path from 'path';
 import fs from 'fs';
 
+// Request tickers
 export async function GET(request: NextRequest) {
   try {
     const filePath = path.resolve(process.cwd(), 'tickers.json');

@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import "./Item.css";
 
+// itemprops interface
 interface ItemProps {
   item: {
     _id: string;
@@ -31,12 +32,14 @@ const Item = ({ item, onDelete }: ItemProps) => {
     companyName: string;
   } | null>(null);
 
+  // what to do on update
   const handleUpdate = async (updates: { logoURL: string; notes: string }) => {
     if (!session) {
       alert("Please log in to update items.");
       return;
     }
 
+    // try fetching data
     try {
       const res = await fetch(`/api/report/${item._id}`, {
         method: 'PUT',
@@ -58,6 +61,7 @@ const Item = ({ item, onDelete }: ItemProps) => {
     }
   };
 
+  // handle delete
   const handleDelete = async () => {
     if (!session) {
       alert("Please log in to delete items.");
@@ -79,6 +83,7 @@ const Item = ({ item, onDelete }: ItemProps) => {
     }
   };
 
+  // fetch stock data (FMP data)
   useEffect(() => {
     const fetchStockData = async () => {
       try {
@@ -100,6 +105,7 @@ const Item = ({ item, onDelete }: ItemProps) => {
     fetchStockData();
   }, [item.ticker]);
 
+  // return item with card styling
   return (
     <Card
       className="item-card"
@@ -116,6 +122,7 @@ const Item = ({ item, onDelete }: ItemProps) => {
         <strong>{stockData?.companyName}</strong> ({item.ticker})
       </h2>
 
+      {/* stock data (includes red/green price change based on if change is positive or negative) */}
       {stockData && (
         <p className="item-stock-price">
           Price: ${stockData.price.toFixed(2)}{' '}

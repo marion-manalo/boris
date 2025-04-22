@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useSession } from 'next-auth/react';
 import "./Card.css";
 
+// define cardProps interface
 interface CardProps {
   children: React.ReactNode;
   className?: string;
@@ -15,6 +16,7 @@ interface CardProps {
   onDelete: () => void; 
 }
 
+/* define react states for a card */
 const Card = ({ children, className = "", logoURL, notes, reportId, onUpdate, onDelete }: CardProps) => {
   const [editMode, setEditMode] = useState(false);
   const [tempLogoURL, setTempLogoURL] = useState(logoURL);
@@ -22,6 +24,7 @@ const Card = ({ children, className = "", logoURL, notes, reportId, onUpdate, on
   const router = useRouter();
   const { status } = useSession();
 
+  // what to do on save
   const handleSave = () => {
     if (status !== 'authenticated') {
       setEditMode(false);
@@ -32,6 +35,7 @@ const Card = ({ children, className = "", logoURL, notes, reportId, onUpdate, on
     setEditMode(false);
   };
 
+  // handle the delete click
   const handleDelete = () => {
     if (status !== 'authenticated') {
       alert('You must be logged in to delete reports.');
@@ -40,6 +44,7 @@ const Card = ({ children, className = "", logoURL, notes, reportId, onUpdate, on
     onDelete();
   };
 
+  // handle clicking view report
   const handleViewReport = () => {
     if (status !== 'authenticated') {
       alert('You must be logged in to view reports.');
@@ -48,6 +53,7 @@ const Card = ({ children, className = "", logoURL, notes, reportId, onUpdate, on
     router.push(`/dashboard/${reportId}`);
   };
 
+  // return card with styling
   return (
     <div className={`card ${className}`} style={{ position: 'relative' }}>
       {/* Delete Button */}

@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import User from "./models/authSchema";
 
+// authenticate users when signing in
 export const {
     handlers: { GET, POST },
     auth,

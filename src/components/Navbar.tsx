@@ -6,6 +6,7 @@ import logo from '@/assets/boris.png';
 import { useRouter } from 'next/navigation';
 import { useSession, signIn, signOut } from 'next-auth/react';
 
+// navbar declare states
 const Navbar = () => {
   const { data: session } = useSession();
   const router = useRouter();
@@ -31,6 +32,7 @@ const Navbar = () => {
     setIsMobileMenuOpen((prev) => !prev);
   };
 
+  // return navbar setup and styled
   return (
     <nav className='bg-[#E2E6EA] border-b border-gray-400'>
       <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>

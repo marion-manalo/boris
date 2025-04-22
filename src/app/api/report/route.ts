@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectMongoDB from '@/config/mongodb';
 import Report from '../../models/reportsSchema';
 
+// post request
 export async function POST(request: NextRequest) {
   try {
     await connectMongoDB();
@@ -38,6 +39,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
+// get request
 export async function GET(request: NextRequest) {
     try {
       await connectMongoDB();
