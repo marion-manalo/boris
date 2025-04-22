@@ -50,9 +50,18 @@ export const {
         }),
     ],
     callbacks: {
+
+        async jwt({ token, user }) {
+            if (user) {
+              token.username = (user as any).username;
+            }
+            return token;
+          },
+
         async session({ session, token }) {
-          if (session.user && token.sub) {
-            session.user.id = token.sub;
+          if (session.user) {
+            session.user.id = token.sub as string;
+            session.user.username = (token as any).username;
           }
           return session;
         },
