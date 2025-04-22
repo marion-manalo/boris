@@ -2,7 +2,7 @@ import Navbar from "../components/Navbar";
 import "./globals.css";
 import {SessionProvider } from 'next-auth/react';
 
-
+// root
 export default function RootLayout({
   children,
 }: Readonly<{

@@ -28,11 +28,14 @@ const Searchbar = ({ handleSearch }: SearchbarProps) => {
   const { data: session } = useSession();
   const router = useRouter();
 
+
   const onSearchClick = async () => {
     if (!ticker.trim()) return;
   
-    const tickerToCheck = ticker.toUpperCase();
+    // all searches will be typed uppercase (as stock tickers are professionally)
+    const tickerToCheck = ticker.toUpperCase(); 
   
+    // try to fetch the ticker data
     try {
       const tickersRes = await fetch('/api/tickers');
       const tickersList = await tickersRes.json();
@@ -59,6 +62,7 @@ const Searchbar = ({ handleSearch }: SearchbarProps) => {
       const data = await res.json();
       const profile = data[0];
   
+      // FMP api stock data
       stockData = {
         price: profile.price,
         marketCap: profile.mktCap,
@@ -129,7 +133,7 @@ const Searchbar = ({ handleSearch }: SearchbarProps) => {
   };
   
   
-
+  // return search bar
   return (
     <div className="searchbar-container">
       <input
@@ -144,7 +148,7 @@ const Searchbar = ({ handleSearch }: SearchbarProps) => {
         value={reportType}
         onChange={(e) => setReportType(e.target.value as '10-K' | '8-K')}
         className="searchbar-dropdown"
-      >
+      > {/* alloq drop down for 10-k or 8-k */}
         <option value="10-K">10-K</option>
         <option value="8-K">8-K</option>
       </select>

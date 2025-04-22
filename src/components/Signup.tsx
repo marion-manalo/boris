@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import './Auth.css';
 
+// set up signup form (different from login)
 export default function SignupForm() {
     const [formData, setFormData] = useState({
         username: '',
@@ -20,6 +21,7 @@ export default function SignupForm() {
         });
     };
 
+    // handle when submit is clicked
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
@@ -54,6 +56,7 @@ export default function SignupForm() {
         }
     };
 
+    // return the signup form with styling
     return (
         <form onSubmit={handleSubmit} className="form">
             <h2 className="heading">Signup</h2>

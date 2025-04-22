@@ -8,6 +8,7 @@ import dash from '@/assets/Dashboard.png';
 import report from '@/assets/styled-report.png';
 import ImageSlide from './ImageSlide/ImageSlide';
 
+// setup and style splash page
 const Splash = () => {
   const imageItems = [
     {
@@ -37,6 +38,7 @@ const Splash = () => {
     },
   ];
 
+  // return splash page with proper setup/styling
   return (
     <div className="splash-container">
       <Welcome />

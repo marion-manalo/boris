@@ -36,6 +36,7 @@ const fetchFilings = async (cik: string) => {
   return res.json();
 };
 
+// generate Gemini API request using SEC EDGAR filings
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   const ticker = searchParams.get('ticker');

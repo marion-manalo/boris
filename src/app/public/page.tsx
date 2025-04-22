@@ -12,6 +12,7 @@ export default function PublicDash() {
     return <p>Loading dashboard...</p>;
   }
 
+  // return public page
   return (
     <main>
       <div className="publicdash-container">

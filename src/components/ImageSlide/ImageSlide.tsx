@@ -18,6 +18,7 @@ const ImageSlide = ({ items }: ImageSlideProps) => {
   const mainItem = items[0];
   const burstItems = items.slice(1);
 
+  // generate image slide animation on front public page
   return (
     <div className="image-burst-wrapper">
       <Image

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Item from './Item';
 import './Items.css';
 
+// report interface
 interface Report {
   _id: string;
   userId: string;
@@ -20,6 +21,7 @@ interface Report {
   };
 }
 
+// public items (static data)
 const PublicItems = () => {
   const [stockItems, setStockItems] = useState<Report[]>([
     {
@@ -40,6 +42,7 @@ const PublicItems = () => {
     },
   ]);
 
+  // return static/public items
   return (
     <section className="items-section">
       <div className="items-container">

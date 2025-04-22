@@ -5,6 +5,7 @@ interface InfoIconProps {
   text: string; 
 }
 
+// implement blue infocard on report page
 function InfoIcon({ text }: InfoIconProps) {
   const [hovered, setHovered] = useState(false);
 

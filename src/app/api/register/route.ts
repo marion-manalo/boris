@@ -3,7 +3,7 @@ import User from "../../models/authSchema";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 
-
+// POST request
 export async function POST(req: NextRequest) {
     try {
         await connectMongoDB();

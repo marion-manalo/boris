@@ -35,6 +35,7 @@ const ReportPage = () => {
   const [report, setReport] = useState<Report | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // fetch the gemini report
   useEffect(() => {
     const fetchReport = async () => {
       try {
@@ -76,11 +77,14 @@ const ReportPage = () => {
     return volume.toString();
   };
 
-
+  // show loading while report is being created
   if (loading) return <p>Loading report...</p>;
   if (!report) return <p>Report not found.</p>;
 
+  // return the company name & date, then key information (stock FMP data)
+  // then return the 10k-summary using SEC EDGAR & Gemini - in this order
   return (
+    // title section
     <div className="report-page">
       <h1 className="title">
         <strong>{report.stockData?.companyName || report.ticker}</strong>
@@ -100,11 +104,15 @@ const ReportPage = () => {
         <br></br>
         <hr className="hr" />
 
+        {/* Key Information Section (FMP stock data) */}
         {report.stockData && (
           <div className="stock-section">
             <h2 className="section-title"><strong>Key Information</strong></h2>
             <div className="stock-grid">
-              <div>
+              <div className="info">
+                <InfoIcon text={
+                  `The most recent trading price agreed upon by buyers and sellers.`
+                } />
                 <strong>Price:</strong> ${report.stockData.price.toFixed(2)}{'  '}
                 {(() => {
                   const previousPrice = report.stockData.price - report.stockData.change;
@@ -121,14 +129,52 @@ const ReportPage = () => {
                   );
                 })()}
               </div>
-              <div><strong>Market Cap:</strong> {formatMarketCap(report.stockData.marketCap)}</div>
-              <div><strong>Volume:</strong> {formatVolume(report.stockData.volume)}</div>
-              <div><strong>Beta:</strong> {report.stockData.beta.toFixed(2)}</div>
-              <div><strong>52 Week Range:</strong> {report.stockData.range}</div>
-              <div><strong>Div/Share:</strong> ${report.stockData.dividend.toFixed(2)}</div>
-              <div><strong>Sector:</strong> {report.stockData.sector}</div>
-              <div><strong>DCF Price:</strong> ${report.stockData.dcf.toFixed(2)}</div>
-              <div><strong>Div Yield:</strong> {((report.stockData.dividend / report.stockData.price) * 100).toFixed(2)}%</div>
+
+              {/* return key info & add infocard explaining each metric */}
+              <div className="info">
+                <InfoIcon text="The total value of a company's outstanding shares of stock." />
+                {' '}<strong>Market Cap:</strong> {formatMarketCap(report.stockData.marketCap)}
+              </div>
+
+              <div className="info">
+                <InfoIcon text="The total number of shares traded during a given period." />
+                {' '}<strong>Volume:</strong> {formatVolume(report.stockData.volume)}
+              </div>
+
+              <div className="info">
+                <InfoIcon text="A measure of a stock's volatility relative to the overall market." />
+                {' '}<strong>Beta:</strong> {report.stockData.beta.toFixed(2)}
+              </div>
+
+              <div className="info">
+                <InfoIcon text="The highest and lowest prices at which a stock has traded during the past year." />
+                {' '}<strong>52 Week Range:</strong> {report.stockData.range}
+              </div>
+
+              <div className="info">
+                <InfoIcon text="The dollar amount of dividends paid per share." />
+                {' '}<strong>Div/Share:</strong> ${report.stockData.dividend.toFixed(2)}
+              </div>
+
+              <div className="info">
+                <InfoIcon text="The broader industry category the company belongs to." />
+                {' '}<strong>Sector:</strong> {report.stockData.sector}
+              </div>
+
+              <div className="info">
+                <InfoIcon text={
+                  `The Discounted Cash Flow (DCF) Price represents the value of a company based on its future cash flows.
+                    A DCF price lower than the market price may suggest an overvalued stock.
+                    A DCF price higher than the market price may suggest an undervalued stock.`
+                } />
+                {' '}<strong>DCF Price:</strong> ${report.stockData.dcf.toFixed(2)}
+              </div>
+
+              <div className="info">
+                <InfoIcon text="Dividend yield shows how much a company pays out in dividends each year relative to its stock price." />
+                {' '}<strong>Div Yield:</strong> {((report.stockData.dividend / report.stockData.price) * 100).toFixed(2)}%
+              </div>
+
             </div>
           </div>
         )}

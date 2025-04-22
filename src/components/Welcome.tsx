@@ -4,6 +4,7 @@ import './Welcome.css';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
+// welcome page
 const Welcome = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -14,13 +15,14 @@ const Welcome = () => {
     router.push(isLoggedIn ? '/dashboard' : '/public');
   };
 
+  // return welcome container
   return (
     <div className="welcome-container">
       <h1 className="welcome-title">
         Need help with investing?
       </h1>
       <p className="welcome-description">
-        Get current insights on any stock and view recent company expense reports.
+        Get current insights on any stock using the power of AI.
       </p>
       <h6 className="welcome-subtitle">
         {isLoggedIn ? "Get started!" : "Give Boris a sneak peak!"}
