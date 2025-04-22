@@ -5,6 +5,7 @@ import { useState } from 'react';
 import logo from '@/assets/boris.png';
 import { useRouter } from 'next/navigation';
 import { useSession, signIn, signOut } from 'next-auth/react';
+import Link from 'next/link';
 
 // navbar declare states
 const Navbar = () => {
@@ -49,8 +50,10 @@ const Navbar = () => {
 
           {/* Logo and Title */}
           <div className='flex items-center'>
-            <Image src={logo} alt='Boris logo' width={40} height={40} className='h-10 w-auto' />
-            <span className='ml-2 text-xl font-bold text-gray-700'>Boris</span>
+            <a href='/' className='flex items-center'>
+              <Image src={logo} alt='Boris logo' width={40} height={40} className='h-10 w-auto' />
+              <span className='ml-2 text-xl font-bold text-gray-700'>Boris</span>
+            </a>
           </div>
 
           {/* Desktop Menu */}
