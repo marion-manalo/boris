@@ -70,9 +70,11 @@ const Navbar = () => {
 
           {/* Auth Button with Welcome Message */}
           <div className='hidden md:flex items-center space-x-4'>
-            <p className='text-gray-700'>
-              Welcome, {session?.user?.username || 'Userrr'}
-            </p>
+            {session && (
+              <p className='text-gray-700'>
+                Welcome, {session.user?.username || 'User'}
+              </p>
+            )}
             <button
               onClick={handleAuthClick}
               className='bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600'
