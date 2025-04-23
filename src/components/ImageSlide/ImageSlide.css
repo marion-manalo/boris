@@ -7,8 +7,8 @@
   }
   
   .image-burst-main {
-    width: 10rem;
-    height: 10rem;
+    width: 7rem;
+    height: 7rem;
     border-radius: 20px;
     border: 1px solid #ccc;
     position: relative;
@@ -29,8 +29,8 @@
   }
   
   .image-burst-inner {
-    max-width: 15rem;
-    max-height: 15rem;
+    max-width: 10rem;
+    max-height: 10rem;
     border-radius: 10px;
     display: block;
     margin: 0 auto;
@@ -54,8 +54,8 @@
     to {
       opacity: 1;
       transform: translate(
-        calc(-50% + var(--slide-offset) * 18rem),
-        12rem
+        calc(-50% + var(--slide-offset) * 15rem),
+        8.5rem
       );
     }
   }
