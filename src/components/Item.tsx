@@ -1,11 +1,11 @@
 'use client';
 import Image from "next/image";
 import Card from "./Card";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import "./Item.css";
 
-// itemprops interface
+// ItemProps interface
 interface ItemProps {
   item: {
     _id: string;
@@ -16,8 +16,12 @@ interface ItemProps {
     notes: string;
     reportType: '10-K' | '8-K';
     createdAt?: string;
+    stockData?: {
+      price: number;
+      change: number;
+      companyName: string;
+    };
   };
-
   onDelete: (id: string) => void;
 }
 
@@ -25,27 +29,19 @@ const Item = ({ item, onDelete }: ItemProps) => {
   const { data: session } = useSession();
   const [logoURL, setLogoURL] = useState(item.logoURL);
   const [notes, setNotes] = useState(item.notes);
+  const [stockData] = useState(item.stockData || null);
 
-  const [stockData, setStockData] = useState<{
-    price: number;
-    change: number;
-    companyName: string;
-  } | null>(null);
-
-  // what to do on update
+  // handle edit/update
   const handleUpdate = async (updates: { logoURL: string; notes: string }) => {
     if (!session) {
       alert("Please log in to update items.");
       return;
     }
 
-    // try fetching data
     try {
       const res = await fetch(`/api/report/${item._id}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates),
       });
 
@@ -83,29 +79,6 @@ const Item = ({ item, onDelete }: ItemProps) => {
     }
   };
 
-  // fetch stock data (FMP data)
-  useEffect(() => {
-    const fetchStockData = async () => {
-      try {
-        const res = await fetch(
-          `https://financialmodelingprep.com/api/v3/profile/${item.ticker}?apikey=2Hey2f7sBndBUkPFmYt5FFNchnjCoHMo`
-        );
-        const data = await res.json();
-        if (data && data.length > 0) {
-          setStockData({
-            price: data[0].price,
-            change: data[0].changes,
-            companyName: data[0].companyName,
-          });
-        }
-      } catch (err) {
-        console.error('Error fetching FMP stock data:', err);
-      }
-    };
-    fetchStockData();
-  }, [item.ticker]);
-
-  // return item with card styling
   return (
     <Card
       className="item-card"
@@ -122,7 +95,6 @@ const Item = ({ item, onDelete }: ItemProps) => {
         <strong>{stockData?.companyName}</strong> ({item.ticker})
       </h2>
 
-      {/* stock data (includes red/green price change based on if change is positive or negative) */}
       {stockData && (
         <p className="item-stock-price">
           Price: ${stockData.price.toFixed(2)}{' '}
@@ -142,7 +114,6 @@ const Item = ({ item, onDelete }: ItemProps) => {
         </p>
       )}
 
-      {/* <p className="item-description">{item.description}</p> */}
       <p className="item-description"><strong>Notes:</strong> {notes}</p>
     </Card>
   );
