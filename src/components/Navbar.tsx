@@ -62,14 +62,17 @@ const Navbar = () => {
               <a href='/' className='text-gray-700 hover:text-gray-900'>Home</a>
               <a href='/about' className='text-gray-700 hover:text-gray-900'>About</a>
               <a href='/contact' className='text-gray-700 hover:text-gray-900'>Contact</a>
-              <button onClick={handleDashboardClick} >
+              <button onClick={handleDashboardClick}>
                 Dashboard
               </button>
             </div>
           </div>
 
-          {/* Auth Button */}
-          <div className='hidden md:block'>
+          {/* Auth Button with Welcome Message */}
+          <div className='hidden md:flex items-center space-x-4'>
+            <p className='text-gray-700'>
+              Welcome, {session?.user?.username || 'Userrr'}
+            </p>
             <button
               onClick={handleAuthClick}
               className='bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600'
@@ -86,11 +89,7 @@ const Navbar = () => {
           <a href='/' className='block text-gray-700 py-2'>Home</a>
           <a href='/about' className='block text-gray-700 py-2'>About</a>
           <a href='/contact' className='block text-gray-700 py-2'>Contact</a>
-          <button
-            onClick={handleDashboardClick}
-          >
-            Dashboard
-          </button>
+          <button onClick={handleDashboardClick}>Dashboard</button>
           <button
             onClick={handleAuthClick}
             className='w-full bg-gray-500 text-white mt-2 py-2 rounded-md hover:bg-gray-600'
